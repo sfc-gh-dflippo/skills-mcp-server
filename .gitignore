@@ -10,7 +10,7 @@ lerna-debug.log*
 *.tgz
 
 # === TypeScript Build Output ===
-dist/
+# Note: dist/ is committed for npx github:user/repo to work
 build/
 *.tsbuildinfo
 
