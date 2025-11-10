@@ -1,4 +1,46 @@
 repos:
+  # Standard pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+        args: [--maxkb=1000]
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: mixed-line-ending
+        args: [--fix=lf]
+
+  # EditorConfig validation
+  - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
+    rev: 3.4.1
+    hooks:
+      - id: editorconfig-checker
+        alias: ec
+
+  # Python linting and formatting
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.4
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format
+
+  # TypeScript/JavaScript formatting
+  - repo: local
+    hooks:
+      - id: prettier
+        name: Prettier
+        entry: npx prettier --write --ignore-unknown
+        language: system
+        types_or: [javascript, jsx, ts, tsx, json, yaml, markdown]
+        pass_filenames: true
+
+  # Security scanning with Entro
   - repo: local
     hooks:
       - id: entro-secret-scan
@@ -11,4 +53,3 @@ repos:
           - pre-commit
         args:
           - --fail-on-findings
-
