@@ -13,110 +13,70 @@ https://github.com/anthropics/skills
 https://github.com/your-org/custom-skills
 ```
 
-### 2. Install MCP Server
+### 2. Install the MCP Server Once
 
-**Published package:** `@sfc-gh-dflippo/skills-mcp-server` on [GitHub Package Registry](https://github.com/sfc-gh-dflippo/skills-mcp-server/pkgs/npm/skills-mcp-server)
+Install directly from the GitHub repository (no registry publish required):
 
-**Setup authentication:**
+```bash
+npm install -g github:sfc-gh-dflippo/skills-mcp-server
+```
 
-GitHub Package Registry requires authentication to download packages.
+This downloads the repo a single time and reuses the cached `skills-mcp-server` binary on every startup, keeping launch times under two seconds.
 
-1. **Create a GitHub Personal Access Token:**
-   - Go to: https://github.com/settings/tokens
-   - Click "Generate new token (classic)"
-   - Select scope: `read:packages`
-   - Copy the token
+Point Cursor (or any client) at the global binary in `~/.cursor/mcp.json`:
 
-2. **Configure npm:**
+```json
+{
+  "mcpServers": {
+    "skills": {
+      "command": "/opt/homebrew/bin/skills-mcp-server"
+    }
+  }
+}
+```
 
-   **Option A: If you already have a `GITHUB_API_KEY` environment variable:**
+**Need a one-off run instead?**
 
-   ```bash
-   cat > ~/.npmrc << EOF
-   @sfc-gh-dflippo:registry=https://npm.pkg.github.com
-   //npm.pkg.github.com/:_authToken=${GITHUB_API_KEY}
-   EOF
-   ```
+```bash
+npx -y github:sfc-gh-dflippo/skills-mcp-server
+```
 
-   **Option B: Replace token manually:**
+The `npx` flow still works but redownloads the repo each time, so expect a ~30s cold start.
 
-   ```bash
-   cat > ~/.npmrc << 'EOF'
-   @sfc-gh-dflippo:registry=https://npm.pkg.github.com
-   //npm.pkg.github.com/:_authToken=YOUR_GITHUB_TOKEN
-   EOF
-   ```
+**Contributor tip:** keep the local dev entry handy if you're iterating:
 
-   Replace `YOUR_GITHUB_TOKEN` with your token.
-
-3. **Add to `.cursor/mcp.json`:**
-
-   ```json
-   {
-     "mcpServers": {
-       "skills": {
-         "command": "npx",
-         "args": ["-y", "@sfc-gh-dflippo/skills-mcp-server"]
-       }
-     }
-   }
-   ```
-
-4. **Restart Cursor** to load the MCP server.
+```json
+{
+  "mcpServers": {
+    "skills-local": {
+      "command": "node",
+      "args": ["dist/index.js"]
+    }
+  }
+}
+```
 
 ### Troubleshooting Installation
 
-**Error: `404 Not Found - GET https://registry.npmjs.org/@sfc-gh-dflippo%2fskills-mcp-server`**
+- **`skills-mcp-server: command not found`**  
+  Ensure your global npm bin directory is on `PATH`:
 
-This error means npm is looking for the package on the public npm registry instead of GitHub Package Registry.
+  ```bash
+  npm prefix -g
+  ```
 
-**Solution:** Configure npm to use GitHub Package Registry for the `@sfc-gh-dflippo` scope:
+  Add `<prefix>/bin` to your shell profile if it isn't already, or point tooling at the absolute binary path (`$(npm prefix -g)/bin/skills-mcp-server`).
 
-1. Check if you have `~/.npmrc` configured:
+- **Slow re-installs**  
+  Remove an old install before re-running `npm install -g`:
 
-   ```bash
-   cat ~/.npmrc
-   ```
+  ```bash
+  npm uninstall -g @sfc-gh-dflippo/skills-mcp-server
+  npm cache clean --force
+  ```
 
-2. If the file doesn't exist or is missing the configuration, create it:
-
-   **Option A: If you have `GITHUB_API_KEY` environment variable:**
-
-   ```bash
-   cat > ~/.npmrc << EOF
-   @sfc-gh-dflippo:registry=https://npm.pkg.github.com
-   //npm.pkg.github.com/:_authToken=${GITHUB_API_KEY}
-   EOF
-   ```
-
-   **Option B: Manual token:**
-
-   ```bash
-   cat > ~/.npmrc << 'EOF'
-   @sfc-gh-dflippo:registry=https://npm.pkg.github.com
-   //npm.pkg.github.com/:_authToken=YOUR_GITHUB_TOKEN
-   EOF
-   ```
-
-   Replace `YOUR_GITHUB_TOKEN` with your token.
-
-3. Verify the file was created correctly:
-
-   ```bash
-   cat ~/.npmrc
-   ```
-
-   You should see your registry and token configuration.
-
-4. Restart Cursor and try again
-
-**Still not working?**
-
-Verify your token has the `read:packages` permission:
-
-- Go to: https://github.com/settings/tokens
-- Click on your token
-- Ensure `read:packages` is checked
+- **Do I need a build step?**  
+  No. The repo commits the prebuilt `dist/` assets, so `npm install -g github:sfc-gh-dflippo/skills-mcp-server` works without an extra `prepare` script. If you pull fresh changes locally, just run `npm run build` before reinstalling from disk.
 
 ### 3. Sync Skills
 
