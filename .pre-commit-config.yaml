@@ -57,7 +57,7 @@ repos:
     hooks:
       - id: prettier
         name: Prettier
-        entry: npx prettier --write --ignore-unknown
+        entry: npx prettier --write --ignore-unknown --cache --cache-location .cache/prettier
         language: system
         types_or: [javascript, jsx, ts, tsx, json, yaml, markdown]
         pass_filenames: true
@@ -71,11 +71,30 @@ repos:
     hooks:
       - id: entro-secret-scan
         name: Entro Secret Scan
-        entry: "bash -c '#!/bin/bash\n\necho \"Running entro security custom pre-commit hook...\"\n\nif git config --bool entro.skipSecretScan; then\n  echo \"Custom Hook: 🛑 Skipping secret scan due to git config 'entro.skipSecretScan' is true.\"\n  exit 0\nfi\n\necho \"Custom Hook: ✅ 'entro.skipSecretScan' is NOT true. Proceeding with scan.\"\n\n entro scan pre-commit . --fail-on-findings || { # '||' means: if previous command fails (non-zero exit)\n  echo \"Custom Hook: ❌ entro cli scan FAILED! Please fix issues before committing.\"\n  exit 1\n}\n\necho \"Custom Hook: ✅ entro cli scan completed successfully.\"\nexit 0'"
+        entry: bash
         language: system
         pass_filenames: false
         always_run: true
         stages:
           - pre-commit
         args:
-          - --fail-on-findings
+          - -lc
+          - |
+            set -euo pipefail
+
+            echo "Running entro security custom pre-commit hook..."
+
+            if git config --bool entro.skipSecretScan; then
+              echo "Custom Hook: 🛑 Skipping secret scan because git config 'entro.skipSecretScan' is true."
+              exit 0
+            fi
+
+            echo "Custom Hook: ✅ 'entro.skipSecretScan' is NOT true. Proceeding with scan."
+
+            if entro scan pre-commit . --fail-on-findings; then
+              echo "Custom Hook: ✅ entro cli scan completed successfully."
+              exit 0
+            else
+              echo "Custom Hook: ❌ entro cli scan FAILED! Please fix issues before committing."
+              exit 1
+            fi
