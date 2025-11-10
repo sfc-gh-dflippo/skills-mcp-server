@@ -1,0 +1,88 @@
+# === Node.js ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.npm
+.yarn/
+.pnp.*
+*.tgz
+
+# === TypeScript Build Output ===
+dist/
+build/
+*.tsbuildinfo
+
+# === Python ===
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+*.so
+*$py.class
+
+# Virtual environments
+.venv/
+.venv-test/
+venv/
+env/
+ENV/
+
+# Python testing
+.pytest_cache/
+.tox/
+.coverage
+.coverage.*
+htmlcov/
+.hypothesis/
+
+# Python distribution / packaging
+*.egg
+*.egg-info/
+dist-py/
+build-py/
+eggs/
+.eggs/
+*.manifest
+*.spec
+
+# Python type checkers
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytype/
+.pyre/
+
+# === Testing & Coverage ===
+coverage/
+.nyc_output/
+*.lcov
+
+# === Environment Variables ===
+.env
+.env.*
+!.env.example
+
+# === OS Files ===
+.DS_Store
+Thumbs.db
+._*
+
+# === IDEs & Editors ===
+.vscode/
+.idea/
+.cursor/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# === Project Specific ===
+.test-compile/
+
+# === Sensitive Configuration ===
+.npmrc
