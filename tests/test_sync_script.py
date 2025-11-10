@@ -67,10 +67,10 @@ class TestScriptStructure:
             content = f.read()
 
         required_imports = [
-            "import os",
             "import subprocess",
             "import sys",
             "from pathlib import Path",
+            "from urllib.parse import urlparse",
             "import frontmatter",
         ]
 

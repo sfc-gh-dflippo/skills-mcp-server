@@ -82,7 +82,7 @@ async function runTests() {
   });
 
   await test("Script has proper imports", () => {
-    const requiredImports = ["import * as fs from 'fs'", "import * as path from 'path'", "import * as child_process from 'child_process'"];
+    const requiredImports = ['import * as fs from "fs"', 'import * as path from "path"', 'import * as child_process from "child_process"'];
 
     for (const imp of requiredImports) {
       assert(scriptContent.includes(imp), `Missing import: ${imp}`);
