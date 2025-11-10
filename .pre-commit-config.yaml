@@ -1,28 +1,45 @@
 repos:
-  # Standard pre-commit hooks
+  # =============================================================================
+  # STAGE 1: Basic File Formatting (Most General)
+  # Fix whitespace, line endings, and file formatting issues
+  # =============================================================================
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
       - id: end-of-file-fixer
-      - id: check-yaml
-      - id: check-json
-      - id: check-added-large-files
-        args: [--maxkb=1000]
-      - id: check-merge-conflict
-      - id: check-case-conflict
       - id: mixed-line-ending
         args: [--fix=lf]
 
-  # EditorConfig validation
+  # =============================================================================
+  # STAGE 2: File Validation (General)
+  # Validate file formats and check for common issues
+  # =============================================================================
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-added-large-files
+        args: [--maxkb=1000]
+
+  # =============================================================================
+  # STAGE 3: EditorConfig Validation (Cross-Language Standards)
+  # Enforce consistent coding styles across all file types
+  # =============================================================================
   - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
     rev: 3.4.1
     hooks:
       - id: editorconfig-checker
         alias: ec
 
-  # Python linting and formatting
+  # =============================================================================
+  # STAGE 4: Language-Specific Linting & Formatting
+  # Python (Ruff) and TypeScript/JavaScript (Prettier)
+  # =============================================================================
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.14.4
     hooks:
@@ -30,7 +47,6 @@ repos:
         args: [--fix, --exit-non-zero-on-fix]
       - id: ruff-format
 
-  # TypeScript/JavaScript formatting
   - repo: local
     hooks:
       - id: prettier
@@ -40,7 +56,10 @@ repos:
         types_or: [javascript, jsx, ts, tsx, json, yaml, markdown]
         pass_filenames: true
 
-  # Security scanning with Entro
+  # =============================================================================
+  # STAGE 5: Security Scanning (Most Critical - Run Last)
+  # Scan for secrets and sensitive data
+  # =============================================================================
   - repo: local
     hooks:
       - id: entro-secret-scan

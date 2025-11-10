@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "skills": {
+      "command": "npx",
+      "args": ["-y", "github:sfc-gh-dflippo/skills-mcp-server"]
+    }
+  }
+}
