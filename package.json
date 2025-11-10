@@ -40,11 +40,11 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.21.1",
     "fastmcp": "^3.22.0"
   },
   "devDependencies": {
     "@types/node": "^24.10.0",
+    "esbuild": "^0.27.0",
     "prettier": "^3.6.2",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
