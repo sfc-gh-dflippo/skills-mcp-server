@@ -15,10 +15,10 @@ https://github.com/your-org/custom-skills
 
 ### 2. Install the MCP Server Once
 
-Install directly from the GitHub repository (no registry publish required):
+Install directly from the GitHub repository tarball (no registry publish required):
 
 ```bash
-npm install -g github:sfc-gh-dflippo/skills-mcp-server
+npm install -g https://codeload.github.com/sfc-gh-dflippo/skills-mcp-server/tar.gz/refs/heads/main
 ```
 
 This downloads the repo a single time and reuses the cached `skills-mcp-server` binary on every startup, keeping launch times under two seconds.
@@ -41,7 +41,7 @@ Point Cursor (or any client) at the global binary in `~/.cursor/mcp.json`:
 npx -y github:sfc-gh-dflippo/skills-mcp-server
 ```
 
-The `npx` flow still works but redownloads the repo each time, so expect a ~30s cold start.
+The `npx` flow still works but redownloads the repo each time and relies on npm’s git install cache (which is slower and less reliable over time), so expect a ~30s cold start.
 
 **Contributor tip:** keep the local dev entry handy if you're iterating:
 
@@ -67,6 +67,16 @@ The `npx` flow still works but redownloads the repo each time, so expect a ~30s 
 
   Add `<prefix>/bin` to your shell profile if it isn't already, or point tooling at the absolute binary path (`$(npm prefix -g)/bin/skills-mcp-server`).
 
+- **`ENOTDIR: not a directory, rename …/skills-mcp-server`**  
+  npm sometimes leaves a partial install in `$(npm prefix -g)/lib/node_modules/@sfc-gh-dflippo`. Remove it before reinstalling:
+
+  ```bash
+  npm uninstall -g @sfc-gh-dflippo/skills-mcp-server
+  rm -rf "$(npm prefix -g)/lib/node_modules/@sfc-gh-dflippo"
+  npm cache clean --force   # optional
+  npm install -g github:sfc-gh-dflippo/skills-mcp-server
+  ```
+
 - **Slow re-installs**  
   Remove an old install before re-running `npm install -g`:
 
@@ -74,6 +84,9 @@ The `npx` flow still works but redownloads the repo each time, so expect a ~30s 
   npm uninstall -g @sfc-gh-dflippo/skills-mcp-server
   npm cache clean --force
   ```
+
+- **Already installed via `github:` and the binary vanished later?**  
+  Reinstall using the tarball URL above. Git installs leave a symlink into npm’s temp cache; the tarball install copies the files into the global prefix so they persist.
 
 - **Do I need a build step?**  
   No. The repo commits the prebuilt `dist/` assets, so `npm install -g github:sfc-gh-dflippo/skills-mcp-server` works without an extra `prepare` script. If you pull fresh changes locally, just run `npm run build` before reinstalling from disk.
