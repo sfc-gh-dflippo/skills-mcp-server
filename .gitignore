@@ -91,7 +91,3 @@ Thumbs.db
 
 # === Sensitive Configuration ===
 .npmrc
-
-# === Skills MCP Server ===
-# Cloned skill repositories (managed by sync-skills script)
-.skills/repositories/

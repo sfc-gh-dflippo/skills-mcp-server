@@ -42,29 +42,31 @@ def check_git_installed() -> bool:
 
 
 def ensure_gitignore() -> None:
-    """Ensure .skills/repositories/ is in .gitignore."""
-    gitignore_path = SCRIPT_DIR / ".gitignore"
-    gitignore_entry = ".skills/repositories/"
+    """Ensure repositories/ is in .skills/.gitignore."""
+    skills_dir = SCRIPT_DIR / ".skills"
+    gitignore_path = skills_dir / ".gitignore"
+    gitignore_entry = "repositories/"
+
+    # Ensure .skills directory exists
+    skills_dir.mkdir(parents=True, exist_ok=True)
 
     if gitignore_path.exists():
         content = gitignore_path.read_text()
-        # Check if entry already exists (exact match or with trailing slash/comment)
-        if gitignore_entry not in content and ".skills/repositories" not in content:
-            # Add entry with a comment section
+        # Check if entry already exists
+        if gitignore_entry not in content and "repositories" not in content:
+            # Add entry with a comment
             if not content.endswith("\n"):
                 content += "\n"
-            content += "\n# === Skills MCP Server ===\n"
             content += "# Cloned skill repositories (managed by sync-skills script)\n"
             content += f"{gitignore_entry}\n"
             _ = gitignore_path.write_text(content)
-            print("  Added .skills/repositories/ to .gitignore")
+            print("  Added repositories/ to .skills/.gitignore")
     else:
-        # Create new .gitignore
-        content = "# === Skills MCP Server ===\n"
-        content += "# Cloned skill repositories (managed by sync-skills script)\n"
+        # Create new .gitignore in .skills/
+        content = "# Cloned skill repositories (managed by sync-skills script)\n"
         content += f"{gitignore_entry}\n"
         _ = gitignore_path.write_text(content)
-        print("  Created .gitignore with .skills/repositories/")
+        print("  Created .skills/.gitignore")
 
 
 def read_repo_list() -> list[str]:
