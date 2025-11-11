@@ -199,13 +199,13 @@ function formatSkillsSection(localSkills, repoSkills) {
     lines.push("# Skills\n\n");
     lines.push("**What are Skills?**\n\n");
     lines.push("Skills are structured instruction sets that enhance AI assistant capabilities " +
-        "for specific domains or tasks. Each skill is a folder containing:\n");
+        "for specific domains or tasks. Each skill is a folder containing:\n\n");
     lines.push("- **SKILL.md** - Core instructions and guidelines\n");
     lines.push("- **references/** - Detailed documentation and examples\n");
     lines.push("- **scripts/** - Helper scripts and templates\n");
     lines.push("- **config/** - Configuration files\n\n");
     lines.push("Skills provide domain-specific knowledge, best practices, " + "code templates, and troubleshooting strategies.\n\n");
-    lines.push("**Key Features:**\n");
+    lines.push("**Key Features:**\n\n");
     lines.push("- Skills can be enabled `[x]` or disabled `[ ]` individually\n\n");
     lines.push("**Available Skills:**\n\n");
     // Local skills

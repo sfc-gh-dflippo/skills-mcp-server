@@ -223,7 +223,7 @@ def format_skills_section(
     output.append(
         "Skills are structured instruction sets that enhance AI assistant "
         + "capabilities for specific domains or tasks. "
-        + "Each skill is a folder containing:\n"
+        + "Each skill is a folder containing:\n\n"
     )
     output.append("- **SKILL.md** - Core instructions and guidelines\n")
     output.append("- **references/** - Detailed documentation and examples\n")
@@ -235,7 +235,7 @@ def format_skills_section(
         + 'Think of them as specialized "expert personas" for areas like '
         + "dbt development, Snowflake operations, or testing frameworks.\n\n"
     )
-    output.append("**Key Features:**\n")
+    output.append("**Key Features:**\n\n")
     output.append("- Skills can be enabled `[x]` or disabled `[ ]` individually\n\n")
     output.append("**Available Skills:**\n\n")
 
