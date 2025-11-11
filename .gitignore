@@ -38,6 +38,10 @@ ENV/
 htmlcov/
 .hypothesis/
 
+# Python linting
+.ruff_cache/
+.mypy_cache/
+
 # Python distribution / packaging
 *.egg
 *.egg-info/

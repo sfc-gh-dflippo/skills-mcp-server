@@ -107,7 +107,7 @@ async function runTests() {
     const content = result.contents[0];
     assert("text" in content, "Content should have text property");
     assert(content.text!.startsWith("#!/usr/bin/env python3"), "Missing Python shebang");
-    assert(content.text!.includes("def main():"), "Missing main function");
+    assert(content.text!.includes("def main()"), "Missing main function");
   });
 
   await test("TypeScript script content is retrievable", async () => {

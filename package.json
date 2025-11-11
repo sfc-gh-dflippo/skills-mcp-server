@@ -20,11 +20,19 @@
     "build": "tsc && mkdir -p dist/resources && cp src/resources/*.py src/resources/*.ts src/resources/*.md dist/resources/",
     "dev": "npx fastmcp dev src/index.ts",
     "start": "node dist/index.js",
-    "test": "npm run test:install && npm run test:server && npm run test:ts-script && npm run test:py-script",
+    "test": "npm run build && npm-run-all --parallel test:install test:server:nobuild test:ts-script test:py-script:nobuild",
+    "test:serial": "npm run test:install && npm run test:server && npm run test:ts-script && npm run test:py-script",
     "test:install": "tsx tests/test-install.ts",
     "test:server": "npm run build && tsx tests/test-server.ts",
+    "test:server:nobuild": "tsx tests/test-server.ts",
     "test:ts-script": "tsx tests/test-sync-script.ts",
-    "test:py-script": "npm run build && cd .. && . skills-mcp-server/.venv-test/bin/activate && pytest skills-mcp-server/tests/test_sync_script.py -v",
+    "test:py-script": "npm run build && cd .. && . skills-mcp-server/.venv-test/bin/activate && pytest skills-mcp-server/tests/test_sync_script.py -v -n auto",
+    "test:py-script:nobuild": "cd .. && . skills-mcp-server/.venv-test/bin/activate && pytest skills-mcp-server/tests/test_sync_script.py -v -n auto",
+    "lint": "eslint src/ tests/",
+    "lint:fix": "eslint src/ tests/ --fix",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"tests/**/*.ts\"",
     "inspect": "npm run build && npx @modelcontextprotocol/inspector node dist/index.js",
     "watch": "tsc --watch",
     "clean": "rm -rf dist",
@@ -45,11 +53,15 @@
     "fastmcp": "^3.22.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.17.0",
     "@types/node": "^24.10.0",
     "esbuild": "^0.27.0",
+    "eslint": "^9.17.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "^3.6.2",
     "tsx": "^4.20.6",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.19.1"
   },
   "engines": {
     "node": ">=18.0.0"

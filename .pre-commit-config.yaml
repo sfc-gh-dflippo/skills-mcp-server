@@ -24,10 +24,20 @@ repos:
     hooks:
       - id: check-yaml
       - id: check-json
+      - id: check-toml
       - id: check-merge-conflict
       - id: check-case-conflict
       - id: check-added-large-files
         args: [--maxkb=1000]
+      - id: check-docstring-first
+        types: [python]
+      - id: check-ast
+        types: [python]
+      - id: debug-statements
+        types: [python]
+      - id: name-tests-test
+        args: [--pytest-test-first]
+        types: [python]
 
   # =============================================================================
   # STAGE 3: EditorConfig Validation (Cross-Language Standards)

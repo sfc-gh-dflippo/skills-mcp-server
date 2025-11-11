@@ -7,10 +7,11 @@ Tests the Python implementation directly:
 - Script can be executed
 """
 
-import pytest
 import subprocess
 import sys
 from pathlib import Path
+
+import pytest
 
 
 @pytest.fixture
@@ -27,8 +28,7 @@ class TestScriptStructure:
 
     def test_script_has_valid_syntax(self, sync_script):
         """Test that the script has valid Python syntax."""
-        with open(sync_script) as f:
-            code = f.read()
+        code = sync_script.read_text()
 
         try:
             compile(code, str(sync_script), "exec")
@@ -37,8 +37,7 @@ class TestScriptStructure:
 
     def test_script_has_shebang(self, sync_script):
         """Test that the script has proper shebang line."""
-        with open(sync_script) as f:
-            first_line = f.readline()
+        first_line = sync_script.read_text().split("\n")[0]
 
         assert first_line.startswith("#!/usr/bin/env python3"), (
             "Script should start with python3 shebang"
@@ -46,8 +45,7 @@ class TestScriptStructure:
 
     def test_script_has_required_functions(self, sync_script):
         """Test that all required functions are present."""
-        with open(sync_script) as f:
-            content = f.read()
+        content = sync_script.read_text()
 
         required_functions = [
             "check_git_installed",
@@ -63,8 +61,7 @@ class TestScriptStructure:
 
     def test_script_has_proper_imports(self, sync_script):
         """Test that the script imports required modules."""
-        with open(sync_script) as f:
-            content = f.read()
+        content = sync_script.read_text()
 
         required_imports = [
             "import subprocess",
@@ -80,9 +77,7 @@ class TestScriptStructure:
     def test_script_size_is_reasonable(self, sync_script):
         """Test that the script size is within expected range."""
         size = sync_script.stat().st_size
-        assert 9000 < size < 12000, (
-            f"Script size {size} bytes seems unusual (expected ~10KB)"
-        )
+        assert 9000 < size < 12000, f"Script size {size} bytes seems unusual (expected ~10KB)"
 
 
 class TestScriptExecution:
@@ -113,9 +108,7 @@ class TestScriptExecution:
         # but should not have syntax errors
         if result.returncode != 0:
             # Check it's not a syntax error
-            assert "SyntaxError" not in result.stderr, (
-                f"Script has syntax error: {result.stderr}"
-            )
+            assert "SyntaxError" not in result.stderr, f"Script has syntax error: {result.stderr}"
 
 
 # Run with: pytest tests/test_sync_script.py -v

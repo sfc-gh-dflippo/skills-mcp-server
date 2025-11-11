@@ -96,7 +96,7 @@ async function cloneOrPullRepo(url: string, targetPath: string): Promise<{ chang
 
 function parseFrontmatter(content: string): { name?: string; description?: string } | null {
   const match = content.match(/^---\s*\n([\s\S]*?)\n---/);
-  if (!match) return null;
+  if (!match || !match[1]) return null;
 
   const frontmatter = match[1];
   const data: any = {};
@@ -217,7 +217,9 @@ function formatSkillsSection(localSkills: Record<string, Skill>, repoSkills: Rec
     lines.push("### Local Skills\n\n");
     for (const name of Object.keys(localSkills).sort()) {
       const skill = localSkills[name];
-      lines.push(`- [x] **[${name}](${skill.path})** - ${skill.description}\n`);
+      if (skill) {
+        lines.push(`- [x] **[${name}](${skill.path})** - ${skill.description}\n`);
+      }
     }
     lines.push("\n");
   }
@@ -230,14 +232,17 @@ function formatSkillsSection(localSkills: Record<string, Skill>, repoSkills: Rec
       if (!repoGroups[skill.source]) {
         repoGroups[skill.source] = [];
       }
-      repoGroups[skill.source].push(skill);
+      repoGroups[skill.source]?.push(skill);
     }
   }
 
   for (const repoName of Object.keys(repoGroups).sort()) {
     lines.push(`### ${repoName}\n\n`);
-    for (const skill of repoGroups[repoName].sort((a, b) => a.name.localeCompare(b.name))) {
-      lines.push(`- [x] **[${skill.name}](${skill.path})** - ${skill.description}\n`);
+    const group = repoGroups[repoName];
+    if (group) {
+      for (const skill of group.sort((a, b) => a.name.localeCompare(b.name))) {
+        lines.push(`- [x] **[${skill.name}](${skill.path})** - ${skill.description}\n`);
+      }
     }
     lines.push("\n");
   }
