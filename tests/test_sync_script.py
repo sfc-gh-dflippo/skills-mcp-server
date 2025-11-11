@@ -77,7 +77,7 @@ class TestScriptStructure:
     def test_script_size_is_reasonable(self, sync_script):
         """Test that the script size is within expected range."""
         size = sync_script.stat().st_size
-        assert 9000 < size < 12000, f"Script size {size} bytes seems unusual (expected ~10KB)"
+        assert 9000 < size < 13000, f"Script size {size} bytes seems unusual (expected ~10-12KB)"
 
 
 class TestScriptExecution:

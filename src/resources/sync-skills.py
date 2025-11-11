@@ -41,6 +41,32 @@ def check_git_installed() -> bool:
         sys.exit(1)
 
 
+def ensure_gitignore() -> None:
+    """Ensure .skills/repositories/ is in .gitignore."""
+    gitignore_path = SCRIPT_DIR / ".gitignore"
+    gitignore_entry = ".skills/repositories/"
+
+    if gitignore_path.exists():
+        content = gitignore_path.read_text()
+        # Check if entry already exists (exact match or with trailing slash/comment)
+        if gitignore_entry not in content and ".skills/repositories" not in content:
+            # Add entry with a comment section
+            if not content.endswith("\n"):
+                content += "\n"
+            content += "\n# === Skills MCP Server ===\n"
+            content += "# Cloned skill repositories (managed by sync-skills script)\n"
+            content += f"{gitignore_entry}\n"
+            _ = gitignore_path.write_text(content)
+            print("  Added .skills/repositories/ to .gitignore")
+    else:
+        # Create new .gitignore
+        content = "# === Skills MCP Server ===\n"
+        content += "# Cloned skill repositories (managed by sync-skills script)\n"
+        content += f"{gitignore_entry}\n"
+        _ = gitignore_path.write_text(content)
+        print("  Created .gitignore with .skills/repositories/")
+
+
 def read_repo_list() -> list[str]:
     """Read repository URLs from config file."""
     if not CONFIG_FILE.exists():
@@ -267,6 +293,7 @@ def update_agents_md(content: str) -> None:
 def main() -> None:
     """Main execution."""
     _ = check_git_installed()
+    ensure_gitignore()
 
     print("Reading repository configuration...")
     repos = read_repo_list()

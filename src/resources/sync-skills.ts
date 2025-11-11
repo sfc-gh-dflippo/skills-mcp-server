@@ -37,6 +37,35 @@ async function checkGitInstalled(): Promise<void> {
   }
 }
 
+function ensureGitignore(): void {
+  const gitignorePath = path.join(SCRIPT_DIR, ".gitignore");
+  const gitignoreEntry = ".skills/repositories/";
+
+  if (fs.existsSync(gitignorePath)) {
+    const content = fs.readFileSync(gitignorePath, "utf-8");
+    // Check if entry already exists
+    if (!content.includes(gitignoreEntry) && !content.includes(".skills/repositories")) {
+      // Add entry with a comment section
+      let newContent = content;
+      if (!content.endsWith("\n")) {
+        newContent += "\n";
+      }
+      newContent += "\n# === Skills MCP Server ===\n";
+      newContent += "# Cloned skill repositories (managed by sync-skills script)\n";
+      newContent += `${gitignoreEntry}\n`;
+      fs.writeFileSync(gitignorePath, newContent);
+      console.log("  Added .skills/repositories/ to .gitignore");
+    }
+  } else {
+    // Create new .gitignore
+    let content = "# === Skills MCP Server ===\n";
+    content += "# Cloned skill repositories (managed by sync-skills script)\n";
+    content += `${gitignoreEntry}\n`;
+    fs.writeFileSync(gitignorePath, content);
+    console.log("  Created .gitignore with .skills/repositories/");
+  }
+}
+
 function readRepoList(): string[] {
   if (!fs.existsSync(CONFIG_FILE)) {
     fs.mkdirSync(path.dirname(CONFIG_FILE), { recursive: true });
@@ -274,6 +303,7 @@ function updateAgentsMd(content: string): void {
 
 async function main(): Promise<void> {
   await checkGitInstalled();
+  ensureGitignore();
 
   console.log("Reading repository configuration...");
   const repos = readRepoList();
