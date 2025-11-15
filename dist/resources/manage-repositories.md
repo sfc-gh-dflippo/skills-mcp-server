@@ -4,7 +4,7 @@
 
 To add a new GitHub repository to sync skills from:
 
-1. **Edit `.skills/repos.txt`** in the project root and add the repository URL:
+1. **Edit `.claude/skills/repos.txt`** in the project root and add the repository URL:
 
    ```text
    https://github.com/anthropics/skills
@@ -20,7 +20,7 @@ To add a new GitHub repository to sync skills from:
 
 To remove a GitHub repository from skills syncing:
 
-1. **Edit `.skills/repos.txt`** and delete or comment out the repository URL:
+1. **Edit `.claude/skills/repos.txt`** and delete or comment out the repository URL:
 
    ```text
    # https://github.com/old-repo/unwanted-skills
@@ -34,7 +34,7 @@ To remove a GitHub repository from skills syncing:
 
 3. **Clean up (optional)** - Delete the repository directory:
    ```bash
-   rm -rf .skills/repositories/github-com/old-repo-unwanted-skills
+   rm -rf .claude/skills/repositories/github-com/old-repo-unwanted-skills
    ```
 
 ## Configuration Format
@@ -61,7 +61,7 @@ https://github.com/myusername/my-skills
 
 The sync script will:
 
-1. Clone new repositories to `.skills/repositories/`
+1. Clone new repositories to `.claude/skills/repositories/`
 2. Pull updates for existing repositories
 3. Scan for SKILL.md files (local and remote)
 4. Apply local skill precedence

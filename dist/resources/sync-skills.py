@@ -2,7 +2,7 @@
 """
 Skills Sync Script - Sync AI agent skills from GitHub repositories using Git.
 Uses git clone/pull for efficiency. Local SKILL.md files take precedence.
-Configure repositories in .skills/repos.txt (created automatically).
+Configure repositories in .claude/skills/repos.txt (created automatically).
 """
 
 import subprocess
@@ -22,8 +22,8 @@ except ImportError:
 
 # Configuration
 SCRIPT_DIR = Path(__file__).parent.resolve()
-SKILLS_DIR = SCRIPT_DIR / ".skills" / "repositories"
-CONFIG_FILE = SCRIPT_DIR / ".skills" / "repos.txt"
+SKILLS_DIR = SCRIPT_DIR / ".claude" / "skills" / "repositories"
+CONFIG_FILE = SCRIPT_DIR / ".claude" / "skills" / "repos.txt"
 AGENTS_MD = SCRIPT_DIR / "AGENTS.md"
 MARKERS = (
     "<!-- BEGIN MCP SKILLS - DO NOT EDIT MANUALLY -->",
@@ -42,12 +42,12 @@ def check_git_installed() -> bool:
 
 
 def ensure_gitignore() -> None:
-    """Ensure repositories/ is in .skills/.gitignore."""
-    skills_dir = SCRIPT_DIR / ".skills"
+    """Ensure repositories/ is in .claude/skills/.gitignore."""
+    skills_dir = SCRIPT_DIR / ".claude" / "skills"
     gitignore_path = skills_dir / ".gitignore"
     gitignore_entry = "repositories/"
 
-    # Ensure .skills directory exists
+    # Ensure .claude/skills directory exists
     skills_dir.mkdir(parents=True, exist_ok=True)
 
     if gitignore_path.exists():
@@ -60,13 +60,13 @@ def ensure_gitignore() -> None:
             content += "# Cloned skill repositories (managed by sync-skills script)\n"
             content += f"{gitignore_entry}\n"
             _ = gitignore_path.write_text(content)
-            print("  Added repositories/ to .skills/.gitignore")
+            print("  Added repositories/ to .claude/skills/.gitignore")
     else:
-        # Create new .gitignore in .skills/
+        # Create new .gitignore in .claude/skills/
         content = "# Cloned skill repositories (managed by sync-skills script)\n"
         content += f"{gitignore_entry}\n"
         _ = gitignore_path.write_text(content)
-        print("  Created .skills/.gitignore")
+        print("  Created .claude/skills/.gitignore")
 
 
 def read_repo_list() -> list[str]:
@@ -144,7 +144,7 @@ def scan_all_skills(
 ) -> tuple[dict[str, dict[str, str]], dict[str, dict[str, str]]]:
     """Scan entire project for SKILL.md files, classifying by location.
 
-    Skills found in .skills/repositories/ are classified as repository skills.
+    Skills found in .claude/skills/repositories/ are classified as repository skills.
     Skills found anywhere else are classified as local skills.
 
     Returns:
@@ -174,7 +174,7 @@ def scan_all_skills(
 
             rel_path = skill_path.relative_to(project_root)
 
-            # Check if this skill is inside .skills/repositories/
+            # Check if this skill is inside .claude/skills/repositories/
             try:
                 _ = skill_path.relative_to(repositories_dir)
                 # It's inside repositories dir - find which repo

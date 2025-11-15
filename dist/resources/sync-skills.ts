@@ -2,7 +2,7 @@
 /**
  * Skills Sync Script - Sync AI agent skills from GitHub repositories using Git.
  * Uses git clone/pull for efficiency. Local SKILL.md files take precedence.
- * Configure repositories in .skills/repos.txt (created automatically).
+ * Configure repositories in .claude/skills/repos.txt (created automatically).
  * Zero external dependencies - only uses Node.js built-ins.
  */
 
@@ -15,8 +15,8 @@ const exec = promisify(child_process.exec);
 
 // Configuration
 const SCRIPT_DIR = process.cwd();
-const SKILLS_DIR = path.join(SCRIPT_DIR, ".skills", "repositories");
-const CONFIG_FILE = path.join(SCRIPT_DIR, ".skills", "repos.txt");
+const SKILLS_DIR = path.join(SCRIPT_DIR, ".claude", "skills", "repositories");
+const CONFIG_FILE = path.join(SCRIPT_DIR, ".claude", "skills", "repos.txt");
 const AGENTS_MD = path.join(SCRIPT_DIR, "AGENTS.md");
 const START_MARKER = "<!-- BEGIN MCP SKILLS - DO NOT EDIT MANUALLY -->";
 const END_MARKER = "<!-- END MCP SKILLS - DO NOT EDIT MANUALLY -->";
@@ -38,11 +38,11 @@ async function checkGitInstalled(): Promise<void> {
 }
 
 function ensureGitignore(): void {
-  const skillsDir = path.join(SCRIPT_DIR, ".skills");
+  const skillsDir = path.join(SCRIPT_DIR, ".claude", "skills");
   const gitignorePath = path.join(skillsDir, ".gitignore");
   const gitignoreEntry = "repositories/";
 
-  // Ensure .skills directory exists
+  // Ensure .claude/skills directory exists
   fs.mkdirSync(skillsDir, { recursive: true });
 
   if (fs.existsSync(gitignorePath)) {
@@ -57,14 +57,14 @@ function ensureGitignore(): void {
       newContent += "# Cloned skill repositories (managed by sync-skills script)\n";
       newContent += `${gitignoreEntry}\n`;
       fs.writeFileSync(gitignorePath, newContent);
-      console.log("  Added repositories/ to .skills/.gitignore");
+      console.log("  Added repositories/ to .claude/skills/.gitignore");
     }
   } else {
-    // Create new .gitignore in .skills/
+    // Create new .gitignore in .claude/skills/
     let content = "# Cloned skill repositories (managed by sync-skills script)\n";
     content += `${gitignoreEntry}\n`;
     fs.writeFileSync(gitignorePath, content);
-    console.log("  Created .skills/.gitignore");
+    console.log("  Created .claude/skills/.gitignore");
   }
 }
 
@@ -178,7 +178,7 @@ function scanAllSkills(
 
             const relPath = path.relative(projectRoot, fullPath);
 
-            // Check if this skill is inside .skills/repositories/
+            // Check if this skill is inside .claude/skills/repositories/
             const isInRepositories = fullPath.startsWith(repositoriesDir + path.sep);
 
             if (isInRepositories) {

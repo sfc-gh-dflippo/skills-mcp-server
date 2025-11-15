@@ -42,7 +42,7 @@ skills-mcp-server/
 │   └── resources/                # Sync scripts (Python & TypeScript)
 ├── dist/                         # Compiled TypeScript output (committed for npx)
 ├── tests/                        # Test suites (TypeScript & Python)
-├── .skills/                      # Skills management
+├── .claude/skills/               # Skills management
 │   ├── repos.txt                 # Repository configuration
 │   └── repositories/             # Cloned skill repos (gitignored)
 ├── pyproject.toml                # Python configuration (centralized)

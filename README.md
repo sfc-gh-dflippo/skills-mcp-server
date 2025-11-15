@@ -5,7 +5,7 @@ The Skills MCP Server distributes Python and TypeScript sync scripts that consol
 ## Overview
 
 - Provides three MCP resources (Python script, TypeScript script, repository guide), two prompts, and one tool.
-- Reads repository URLs from `.skills/repos.txt`, clones/pulls the sources, and rewrites `AGENTS.md` with the merged skill catalog.
+- Reads repository URLs from `.claude/skills/repos.txt`, clones/pulls the sources, and rewrites `AGENTS.md` with the merged skill catalog.
 - Ships precompiled assets under `dist/`; no runtime build step is required for users.
 
 ## Installation
@@ -40,7 +40,7 @@ The Skills MCP Server distributes Python and TypeScript sync scripts that consol
 
 ## Usage
 
-1. Maintain `.skills/repos.txt` with one repository URL per line.
+1. Maintain `.claude/skills/repos.txt` with one repository URL per line.
 2. Ask your assistant to run `/skills/sync-skills` (Cursor) or via natural text, "Please sync my skill repositories".
 3. The agent downloads the preferred script, executes it locally, and updates `AGENTS.md`. Local SKILL.md files override remote entries by design.
 

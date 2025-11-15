@@ -21,7 +21,7 @@ const __dirname = path.dirname(__filename);
 
 // Constants for instructions
 const WHAT_IT_DOES_INSTRUCTIONS = `**What it does:**
-- Reads repositories from \`.skills/repos.txt\`
+- Reads repositories from \`.claude/skills/repos.txt\`
 - Clones/pulls GitHub repos efficiently
 - Scans for local and remote SKILL.md files
 - Applies local skill precedence
@@ -64,7 +64,7 @@ ${WHAT_IT_DOES_INSTRUCTIONS}
 
 ## Configuration
 
-Configure repositories in \`.skills/repos.txt\`:
+Configure repositories in \`.claude/skills/repos.txt\`:
 \`\`\`
 https://github.com/anthropics/skills
 https://github.com/your-org/custom-skills

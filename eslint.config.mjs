@@ -18,7 +18,13 @@ export default tseslint.config(
     ...tseslint.configs.disableTypeChecked,
   },
   {
-    ignores: ["dist/**", "node_modules/**", ".cache/**", "*.config.mjs"],
+    ignores: [
+      "dist/**",
+      "node_modules/**",
+      ".cache/**",
+      "*.config.mjs",
+      "**/.claude/skills/repositories/**",
+    ],
   },
   {
     rules: {
