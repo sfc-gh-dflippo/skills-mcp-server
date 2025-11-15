@@ -89,5 +89,8 @@ Thumbs.db
 .test-compile/
 .cache/
 
+# Skills repositories (cloned by sync script)
+.claude/skills/repositories/
+
 # === Sensitive Configuration ===
 .npmrc
